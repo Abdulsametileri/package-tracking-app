@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>WebSocket</title>
+</head>
+
+<body>
+huhuhuhuuh
+<p id="output"></p>
+
+<script>
+    ws = new WebSocket("ws://localhost:1323/packages/track/123")
+
+    ws.onopen = function() {
+        console.log('Connected')
+    }
+
+    ws.onmessage = function(evt) {
+        var out = document.getElementById('output');
+        out.innerHTML += evt.data + '<br>';
+    }
+
+    setInterval(function() {
+        ws.send('Hello, Server!');
+    }, 1000);
+</script>
+</body>
+
+</html>
