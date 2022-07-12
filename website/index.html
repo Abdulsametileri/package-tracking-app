@@ -1,4 +1,48 @@
-<!doctype html>
+<script src="https://unpkg.com/vue@3"></script>
+
+<div id="app" >
+    <hr>
+    <div class="width: 100%; text-align:center;"  v-for="loc in locations" :key="loc.to">
+        <pre>{{loc}}</pre>
+        <hr>
+    </div>
+</div>
+
+<script>
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                locations: []
+            }
+        },
+        methods: {
+            formatDate(d) {
+                hours = this.formatTwoDigits(d.getHours());
+                minutes = this.formatTwoDigits(d.getMinutes());
+                seconds = this.formatTwoDigits(d.getSeconds());
+                return hours + ":" + minutes + ":" + seconds;
+            },
+            formatTwoDigits(n) {
+                return n < 10 ? '0' + n : n;
+            }
+        },
+        mounted() {
+            let vehicleId = "123"
+            let ws = new WebSocket(`ws://localhost:1323/packages/track/${vehicleId}`)
+            ws.onopen = () => {
+                console.log('Connected')
+            }
+            ws.onmessage = (evt) => {
+                let loc =  JSON.parse(evt.data)
+                loc.date = this.formatDate(new Date())
+                this.locations.push(loc)
+            }
+        }
+    }).mount('#app')
+</script>
+<!---<!doctype html>
 <html lang="en">
 
 <head>
@@ -9,7 +53,7 @@
 <body>
 <div style="text-align: center">
     <h3>Ready to watch package status!</h3>
-    <p id="output"></p>
+    <h4 id="output">10:13:34 `{"from":"Bordeaux","to":"Toulouse","vehicleId":"123"}`</h4>
 </div>
 
 
@@ -24,7 +68,7 @@
     ws.onmessage = function(evt) {
         console.log(evt)
         let out = document.getElementById('output');
-        out.innerHTML += timeFormat(new Date()) + " " +  evt.data + '<br>';
+        out.innerHTML += timeFormat(new Date()) + ' ' +  evt.data + '<br>';
     }
 
     function timeFormat(d) {
@@ -40,4 +84,4 @@
 </script>
 </body>
 
-</html>
+</html>-->
