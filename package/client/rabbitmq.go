@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/Abdulsametileri/package-tracking-app/domain"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -48,9 +49,9 @@ func (c *rabbitmqClient) ConsumeByVehicleID(ctx context.Context, vehicleID strin
 }
 
 func (c *rabbitmqClient) Publish(p domain.Package) {
-	jsonStr := fmt.Sprintf(`{ "from": "%s", "to": "%s", "vehicleId": "%s" }`, p.From, p.To, p.VehicleID)
+	jsonStr := fmt.Sprintf(`{ "from": %q, "to": %q, "vehicleId": %q }`, p.From, p.To, p.VehicleID)
 
-	c.ch.Publish("", QueueName, false, false, amqp.Publishing{
+	_ = c.ch.Publish("", QueueName, false, false, amqp.Publishing{
 		ContentType: "application/json",
 		MessageId:   p.VehicleID,
 		Body:        []byte(jsonStr),

@@ -1,14 +1,15 @@
 package main
 
 import (
+	"log"
+	"time"
+
 	"github.com/Abdulsametileri/package-tracking-app/domain"
 	_packageClient "github.com/Abdulsametileri/package-tracking-app/package/client"
 	_packageHttpDelivery "github.com/Abdulsametileri/package-tracking-app/package/delivery/http"
 	_packageUcase "github.com/Abdulsametileri/package-tracking-app/package/usecase"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"log"
-	"time"
 )
 
 func main() {
