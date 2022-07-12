@@ -3,12 +3,16 @@
 
 <head>
     <meta charset="utf-8">
-    <title>WebSocket</title>
+    <title>Package Tracking App</title>
 </head>
 
 <body>
-huhuhuhuuh
-<p id="output"></p>
+<div style="text-align: center">
+    <h3>Ready to watch package status!</h3>
+    <p id="output"></p>
+</div>
+
+
 
 <script>
     ws = new WebSocket("ws://localhost:1323/packages/track/123")
@@ -18,13 +22,21 @@ huhuhuhuuh
     }
 
     ws.onmessage = function(evt) {
-        var out = document.getElementById('output');
-        out.innerHTML += evt.data + '<br>';
+        console.log(evt)
+        let out = document.getElementById('output');
+        out.innerHTML += timeFormat(new Date()) + " " +  evt.data + '<br>';
     }
 
-    setInterval(function() {
-        ws.send('Hello, Server!');
-    }, 1000);
+    function timeFormat(d) {
+        hours = format_two_digits(d.getHours());
+        minutes = format_two_digits(d.getMinutes());
+        seconds = format_two_digits(d.getSeconds());
+        return hours + ":" + minutes + ":" + seconds;
+    }
+
+    function format_two_digits(n) {
+        return n < 10 ? '0' + n : n;
+    }
 </script>
 </body>
 
