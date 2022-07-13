@@ -29,7 +29,7 @@ func main() {
 		time.Sleep(3 * time.Second)
 		pc.Publish(domain.Package{From: "Bordeaux", To: "Toulouse", VehicleID: "123"})
 		time.Sleep(3 * time.Second)
-		pc.Publish(domain.Package{From: "Toulouse", To: "Monaco", VehicleID: "123"})
+		pc.Publish(domain.Package{From: "Toulouse", To: "Monaco", VehicleID: "12"})
 		time.Sleep(3 * time.Second)
 		pc.Publish(domain.Package{From: "Monaco", To: "Lyon", VehicleID: "123"})
 		time.Sleep(3 * time.Second)

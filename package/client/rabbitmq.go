@@ -42,6 +42,7 @@ func NewRabbitMQClient(connectionString string) (*rabbitmqClient, error) {
 func (c *rabbitmqClient) ConsumeByVehicleID(ctx context.Context, vehicleID string) ([]byte, error) {
 	for msg := range c.packageStatus {
 		if msg.MessageId == vehicleID {
+			_ = msg.Ack(false)
 			return msg.Body, nil
 		}
 	}
@@ -51,7 +52,7 @@ func (c *rabbitmqClient) ConsumeByVehicleID(ctx context.Context, vehicleID strin
 func (c *rabbitmqClient) Publish(p domain.Package) {
 	jsonStr := fmt.Sprintf(`{ "from": %q, "to": %q, "vehicleId": %q }`, p.From, p.To, p.VehicleID)
 
-	_ = c.ch.Publish("", QueueName, false, false, amqp.Publishing{
+	_ = c.ch.Publish("", QueueName, true, false, amqp.Publishing{
 		ContentType: "application/json",
 		MessageId:   p.VehicleID,
 		Body:        []byte(jsonStr),
@@ -79,10 +80,10 @@ func (c *rabbitmqClient) configureQueue() error {
 	c.packageStatus, err = c.ch.Consume(
 		QueueName,
 		"",
+		false,
+		false,
+		false,
 		true,
-		false,
-		false,
-		false,
 		nil,
 	)
 	return err
